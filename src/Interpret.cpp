@@ -17,6 +17,7 @@ void interpret(std::vector<std::string> code)
 		std::cout << "tape: " << m.getTape() << "\n";
 		m.step();
 	} while (m.isRunning());
+	std::cout << "end-tape: " << m.getTape() << "\n";
 }
 
 void load(Machine& m, const std::vector<std::string>& code)
