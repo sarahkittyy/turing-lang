@@ -41,10 +41,14 @@ void Machine::step()
 	mRunning		  = true;
 	signed char* head = get();
 	State& cstate	 = getState(mCState);
-	Rule& r			  = *cstate.getRule(*head);
-	set(r.to);
+	Rule* r			  = cstate.getRule(*head);
+	if (r == nullptr)
+	{
+		throw std::out_of_range("No rule defined for " + std::to_string(*head));
+	}
+	set(r->to);
 
-	std::string n = r.next;
+	std::string n = r->next;
 	if (n[0] == '$')
 	{
 		n		 = n.substr(1);
