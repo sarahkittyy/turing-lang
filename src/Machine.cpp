@@ -21,7 +21,9 @@ std::string Machine::getTape()
 	{
 		ret << (item == -1 ? '.' : (item == 0 ? '0' : '1'));
 	}
-	return ret.str();
+	//Remove trailing '.'. chars.
+	std::regex trailingdot(R"((.*?)\.*$)");
+	return std::regex_replace(ret.str(), trailingdot, "$1");
 }
 
 void Machine::setPosition(size_t pos)
@@ -31,10 +33,6 @@ void Machine::setPosition(size_t pos)
 
 void Machine::setState(std::string name)
 {
-	if (name != mCState)
-	{
-		setPosition(0);
-	}
 	mCState = name;
 }
 
@@ -46,11 +44,19 @@ void Machine::step()
 	Rule& r			  = *cstate.getRule(*head);
 	set(r.to);
 
-	next();
-
-	if (r.next != "halt")
+	std::string n = r.next;
+	if (n[0] == '$')
 	{
-		setState(r.next);
+		n		 = n.substr(1);
+		mForward = !mForward;
+	}
+
+	(mForward ? next() : prev());
+
+
+	if (n != "halt")
+	{
+		setState(n);
 	}
 	else
 	{

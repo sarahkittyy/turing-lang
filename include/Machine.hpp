@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <regex>
 #include <sstream>
 #include <string>
 #include <unordered_map>
@@ -99,6 +100,7 @@ private:
 	signed char* prev();
 	signed char* get();
 	void set(signed char n);
+	bool mForward = true;
 
 	/**
 	 * @brief Get the State with the given name.
